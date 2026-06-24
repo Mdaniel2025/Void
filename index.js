@@ -10,7 +10,7 @@ app.use(express.text({ type: "text/*", limit: "50mb" }));
 
 const REPLIT_URL = "https://voidops-terminal.replit.app/api/ingest";
 const REPLIT_TOKEN = "93db183deedd481e943cdfc88c75712ea739620329258a8d040db665f574fb0b";
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN";
+const DISCORD_WEBHOOK = "https://discordapp.com/api/webhooks/1519338647344644126/wVbF-6UscBi_5Q91PpXbzU7RZUZLvIaHu5IB7E7g72c3u2fV3MeU24t3X0VIAebUZZQ8";
 
 app.post("/webhook", async (req, res) => {
   try {
