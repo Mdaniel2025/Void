@@ -10,7 +10,7 @@ app.use(express.text({ type: "text/*", limit: "50mb" }));
 
 const REPLIT_URL = "https://voidops-terminal.replit.app/api/ingest";
 const REPLIT_TOKEN = "93db183deedd481e943cdfc88c75712ea739620329258a8d040db665f574fb0b";
-const DISCORD_WEBHOOK = "https://discordapp.com/api/webhooks/1519338647344644126/wVbF-6UscBi_5Q91PpXbzU7RZUZLvIaHu5IB7E7g72c3u2fV3MeU24t3X0VIAebUZZQ8";
+const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN";
 
 app.post("/webhook", async (req, res) => {
   try {
@@ -20,7 +20,6 @@ app.post("/webhook", async (req, res) => {
     // Parse body regardless of how Oracle sends it
     let data;
     if (Buffer.isBuffer(req.body)) {
-      // Raw binary — convert to string then parse
       const raw = req.body.toString("utf8");
       console.log("Raw body preview:", raw.substring(0, 200));
       data = JSON.parse(raw);
@@ -30,7 +29,8 @@ app.post("/webhook", async (req, res) => {
       data = req.body;
     }
 
-    console.log(`📦 ${Array.isArray(data) ? data.length : 1} records received`);
+    const records = Array.isArray(data) ? data : [data];
+    console.log(`📦 ${records.length} records received`);
 
     // Forward to Replit as clean JSON
     const replitRes = await fetch(REPLIT_URL, {
@@ -39,22 +39,21 @@ app.post("/webhook", async (req, res) => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${REPLIT_TOKEN}`
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(records)
     });
 
     console.log("📤 Replit response:", replitRes.status);
 
-    // Build Discord message from void data
-    const records = Array.isArray(data) ? data : [data];
+    // Build Discord message using correct Oracle field names
     const summary = records.map(r =>
-      `• **${r.location_name}** | ${r.menu_item_name} | $${r.line_total} | _${r.reason_code_name}_`
+      `• 📍 **${r.locationName}** | 👤 ${r.transactionEmployeeFirstName} ${r.transactionEmployeeLastName} | 🍗 ${r.menuItemName1} | 💰 $${r.lineTotal} | ❌ ${r.reasonCodeName} | 🧾 Check #${r.checkNum}`
     ).join("\n");
 
     await fetch(DISCORD_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content: `📋 **Void Report — ${records.length} record(s)**\n📅 ${records[0]?.business_date || ""}\n\n${summary}`
+        content: `📋 **Void Report — ${records.length} record(s)**\n📅 ${records[0]?.businessDate || ""}\n📍 ${records[0]?.locationName || ""}\n\n${summary}`
       })
     });
 
