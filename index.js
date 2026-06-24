@@ -6,7 +6,7 @@ const app = express();
 app.use(express.raw({ type: "*/*", limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 
-const DISCORD_WEBHOOK = "https://discordapp.com/api/webhooks/1519338647344644126/wVbF-6UscBi_5Q91PpXbzU7RZUZLvIaHu5IB7E7g72c3u2fV3MeU24t3X0VIAebUZZQ8";
+const DISCORD_WEBHOOK = "https://voidops-terminal.replit.app/api/ingest";
 
 app.post("/webhook", async (req, res) => {
   try {
@@ -25,7 +25,7 @@ app.post("/webhook", async (req, res) => {
       })
     });
 
-    console.log("✅ Sent to Discord!");
+    console.log("✅ Sent to App!");
     res.status(200).send("OK");
   } catch (err) {
     console.error("❌ Error:", err);
