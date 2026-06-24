@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: oracle-relay
+    runtime: node
+    startCommand: node index.js
