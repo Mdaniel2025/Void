@@ -6,7 +6,7 @@ const app = express();
 app.use(express.raw({ type: "*/*", limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN";
+const DISCORD_WEBHOOK = "https://discordapp.com/api/webhooks/1519338647344644126/wVbF-6UscBi_5Q91PpXbzU7RZUZLvIaHu5IB7E7g72c3u2fV3MeU24t3X0VIAebUZZQ8";
 
 app.post("/webhook", async (req, res) => {
   try {
